@@ -7,6 +7,7 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -25,6 +27,7 @@ import java.util.*;
  *
  * @author wang_yw
  */
+@Slf4j
 @Service
 public class SeeService {
 
@@ -34,8 +37,10 @@ public class SeeService {
     public static final Set<String> holidaySet = new HashSet<>();
 
 
-    @Scheduled(cron = "0 */5 * * * ?")
+    //@Scheduled(cron = "0 */5 * * * ?")
+    @Scheduled(cron = "*/5 * * * * ?")
     public void exec() {
+        log.info("定时执行扫描任务：");
         if (CollectionUtils.isEmpty(holidaySet)) {
             this.initHoliday();
         }
@@ -58,7 +63,7 @@ public class SeeService {
                 } else {
                     msg = "无法预约，日期为：" + date + ",医生为：" + noSchTimeMap.get(date);
                 }
-                System.out.println(msg);
+                log.info("扫描结果:{}", msg);
             });
         } else {
             pushService.pushToBark("获取可挂号信息失败！请检查token");
@@ -66,10 +71,14 @@ public class SeeService {
     }
 
 
+    @PostConstruct
     private void initHoliday() {
+        log.info("开始初始化节假日信息：");
+
         String url = "https://timor.tech/api/holiday/year/" + LocalDate.now().getYear() + "/?week=Y";
         JSONObject result = JSON.parseObject(HttpUtil.get(url));
         if (result.getInteger("code") == 0) {
+            log.info("获取节假日信息成功:{}", result);
             JSONObject holiday = result.getJSONObject("holiday");
             for (Map.Entry<String, Object> stringObjectEntry : holiday.entrySet()) {
                 JSONObject day = (JSONObject) stringObjectEntry.getValue();
@@ -78,7 +87,9 @@ public class SeeService {
                     holidaySet.add(dateStr);
                 }
             }
+            log.info("holidaySet:{}", holidaySet);
         }
+
     }
 
     public Map<String, String> parseNoSchTime(JSONObject json) {
