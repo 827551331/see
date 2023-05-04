@@ -37,8 +37,8 @@ public class SeeService {
     public static final Set<String> holidaySet = new HashSet<>();
 
 
-    //@Scheduled(cron = "0 */5 * * * ?")
-    @Scheduled(cron = "*/5 * * * * ?")
+    //@Scheduled(cron = "*/5 * * * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void exec() {
         log.info("定时执行扫描任务：");
         if (CollectionUtils.isEmpty(holidaySet)) {
