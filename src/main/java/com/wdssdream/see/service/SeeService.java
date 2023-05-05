@@ -36,6 +36,8 @@ public class SeeService {
 
     public static final Set<String> holidaySet = new HashSet<>();
 
+    public static int number = 0;
+
 
     //@Scheduled(cron = "*/5 * * * * ?")
     @Scheduled(cron = "0 */5 * * * ?")
@@ -59,7 +61,11 @@ public class SeeService {
                 String msg;
                 if (holidaySet.contains(date)) {
                     msg = "可以预约了，速度上线，可预约的日期为：" + date + ",医生为：" + noSchTimeMap.get(date);
-                    pushService.pushToBark(msg);
+                    //最多通知 3 次
+                    if (number < 3) {
+                        pushService.pushToBark(msg);
+                        number++;
+                    }
                 } else {
                     msg = "无法预约，日期为：" + date + ",医生为：" + noSchTimeMap.get(date);
                 }
