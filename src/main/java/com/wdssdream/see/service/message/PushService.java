@@ -1,4 +1,4 @@
-package com.wdssdream.see.service;
+package com.wdssdream.see.service.message;
 
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
  *
  * @author wang_yw
  */
+@Deprecated
 @Slf4j
 @Service
 public class PushService {

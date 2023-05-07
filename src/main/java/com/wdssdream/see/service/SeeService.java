@@ -1,23 +1,22 @@
 package com.wdssdream.see.service;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.wdssdream.see.service.message.Message;
+import com.wdssdream.see.service.message.MessageFactory;
+import com.wdssdream.see.service.message.MessagePush;
+import com.wdssdream.see.service.message.PushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -32,7 +31,7 @@ import java.util.*;
 public class SeeService {
 
     @Autowired
-    private PushService pushService;
+    private MessagePush messagePush;
 
     public static final Set<String> holidaySet = new HashSet<>();
 
@@ -63,7 +62,7 @@ public class SeeService {
                     msg = "可以预约了，速度上线，可预约的日期为：" + date + ",医生为：" + noSchTimeMap.get(date);
                     //最多通知 3 次
                     if (number < 3) {
-                        pushService.pushToBark(msg);
+                        messagePush.push(MessageFactory.createMessage(msg));
                         number++;
                     }
                 } else {
@@ -72,7 +71,7 @@ public class SeeService {
                 log.info("扫描结果:{}", msg);
             });
         } else {
-            pushService.pushToBark("获取可挂号信息失败！请检查token");
+            messagePush.push(MessageFactory.createMessage("获取可挂号信息失败！请检查token"));
         }
     }
 
