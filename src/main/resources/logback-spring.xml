@@ -1,24 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+
+    <!-- 定义 dev 环境下的配置 -->
+    <springProfile name="dev">
+        <property name="LOG_HOME" value="./var/log/see-dev"/>
+    </springProfile>
+
+    <!-- 定义 test 环境下的配置 -->
+    <springProfile name="test">
+        <property name="LOG_HOME" value="/var/log/see-test"/>
+    </springProfile>
+
+    <!-- 定义 prod 环境下的配置 -->
+    <springProfile name="prod">
+        <property name="LOG_HOME" value="/var/log/see-prod"/>
+    </springProfile>
+
+    <!-- 定义控制台输出格式 -->
+    <property name="CONSOLE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- 定义日志文件输出格式 -->
+    <property name="FILE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- 定义控制台输出 -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${CONSOLE_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./var/log/see.log</file>
+    <!-- 定义日志文件输出 -->
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/see.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/see.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <fileNamePattern>${LOG_HOME}/see.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_PATTERN}</pattern>
         </encoder>
     </appender>
 
+    <!-- 定义日志输出级别 -->
     <root level="info">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="Console"/>
+        <appender-ref ref="File"/>
     </root>
+
+
 </configuration>
