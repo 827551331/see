@@ -71,6 +71,8 @@ public class SeeService {
                 log.info("扫描结果:{}", msg);
             });
         } else {
+            //同时利用这个特点，在出错之后放弃一直发送
+            number = 4;
             messagePush.push(MessageFactory.createMessage("获取可挂号信息失败！请检查token"));
         }
     }
