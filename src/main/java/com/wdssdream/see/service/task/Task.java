@@ -7,4 +7,11 @@ package com.wdssdream.see.service.task;
  * @author wang_yw
  */
 public interface Task {
+
+    /**
+     * 任务执行方法
+     *
+     * @return TaskResult
+     */
+    TaskResult execute();
 }
