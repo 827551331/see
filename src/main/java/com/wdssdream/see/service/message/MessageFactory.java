@@ -9,16 +9,19 @@ package com.wdssdream.see.service.message;
 public class MessageFactory {
 
     private static final String DEFAULT_TITLE = "Default Title";
+    private static final Message message = new Message(DEFAULT_TITLE, "");
 
     public static Message createMessage(String content) {
-        Message message = new Message(DEFAULT_TITLE, content);
 
+        Message result = null;
+        // 创建并返回 Message 对象的克隆副本
         try {
-            // 创建并返回 Message 对象的克隆副本
-            return (Message) message.clone();
+            result = message.clone();
+            result.setContent(content);
         } catch (CloneNotSupportedException e) {
-            // 处理 CloneNotSupportedException 异常
-            throw new RuntimeException("Failed to clone Message object", e);
+            e.printStackTrace();
         }
+        return result;
     }
 }
+å

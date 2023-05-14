@@ -8,7 +8,9 @@ import com.wdssdream.see.service.message.Message;
  *
  * @author wang_yw
  */
-public class TaskResult {
+public class TaskResult implements Cloneable {
+
+    private static final Integer PUSH_FLAG = 1;
 
     /**
      * 这里用 Integer 方便以后扩展
@@ -37,5 +39,11 @@ public class TaskResult {
     public TaskResult setMessage(Message message) {
         this.message = message;
         return this;
+    }
+
+    public TaskResult clone() throws CloneNotSupportedException {
+        TaskResult cloneResult = (TaskResult) super.clone();
+        cloneResult.message = this.message.clone(); // 克隆消息体对象
+        return cloneResult;
     }
 }

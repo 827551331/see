@@ -45,8 +45,8 @@ public class Message implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Message clone() throws CloneNotSupportedException {
+        return (Message) super.clone();
     }
 
 }
