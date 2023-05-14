@@ -24,4 +24,3 @@ public class MessageFactory {
         return result;
     }
 }
-å

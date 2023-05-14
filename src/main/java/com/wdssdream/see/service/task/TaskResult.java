@@ -10,7 +10,7 @@ import com.wdssdream.see.service.message.Message;
  */
 public class TaskResult implements Cloneable {
 
-    private static final Integer PUSH_FLAG = 1;
+    public static final Integer PUSH_FLAG = 1;
 
     /**
      * 这里用 Integer 方便以后扩展
