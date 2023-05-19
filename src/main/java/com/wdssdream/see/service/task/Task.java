@@ -1,5 +1,7 @@
 package com.wdssdream.see.service.task;
 
+import java.util.Properties;
+
 /**
  * description: Task
  * date: 2023/5/10 23:22
@@ -14,4 +16,12 @@ public interface Task {
      * @return TaskResult
      */
     TaskResult execute();
+
+    /**
+     * 带参数的执行方法
+     *
+     * @param properties：参数信息
+     * @return TaskResult
+     */
+    TaskResult execute(Properties properties);
 }
