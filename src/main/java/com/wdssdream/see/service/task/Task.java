@@ -17,11 +17,4 @@ public interface Task {
      */
     TaskResult execute();
 
-    /**
-     * 带参数的执行方法
-     *
-     * @param properties：参数信息
-     * @return TaskResult
-     */
-    TaskResult execute(Properties properties);
 }
