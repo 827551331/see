@@ -20,6 +20,10 @@ public class Message implements Cloneable {
      */
     private String content;
 
+    //关闭默认无参构造器
+    private Message() {
+    }
+
     public String getTitle() {
         return title;
     }

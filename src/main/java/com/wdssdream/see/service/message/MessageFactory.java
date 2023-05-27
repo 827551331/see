@@ -9,7 +9,7 @@ package com.wdssdream.see.service.message;
 public class MessageFactory {
 
     private static final String DEFAULT_TITLE = "Default Title";
-    private static final Message message = new Message(DEFAULT_TITLE, "");
+    private static final Message message = new Message(DEFAULT_TITLE, null);
 
     public static Message createMessage(String content) {
 
@@ -17,6 +17,20 @@ public class MessageFactory {
         // 创建并返回 Message 对象的克隆副本
         try {
             result = message.clone();
+            result.setContent(content);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static Message createMessage(String title, String content) {
+
+        Message result = null;
+        // 创建并返回 Message 对象的克隆副本
+        try {
+            result = message.clone();
+            result.setTitle(title);
             result.setContent(content);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
