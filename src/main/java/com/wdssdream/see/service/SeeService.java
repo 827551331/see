@@ -78,7 +78,7 @@ public class SeeService {
     }
 
 
-    @PostConstruct
+//    @PostConstruct
     private void initHoliday() {
         log.info("开始初始化节假日信息：");
 
