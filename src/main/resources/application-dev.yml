@@ -2,10 +2,11 @@ logging:
   level:
     root: info
 
+
 # 数据库连接配置
 spring:
   datasource:
-    url: jdbc:mysql://39.100.136.2:3306/see
+    url: jdbc:mysql://39.100.136.2:10001/see
     username: root
     password: 123456qqaa
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -16,3 +17,10 @@ spring:
       maximum-pool-size: 10
       idle-timeout: 30000
       pool-name: MyHikariCP
+
+  security:
+    enabled: false
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
