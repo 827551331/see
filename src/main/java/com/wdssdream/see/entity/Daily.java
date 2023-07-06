@@ -18,6 +18,8 @@ public class Daily implements Cloneable{
     private String title;
     @TableField
     private String content;
+    @TableField("editor_content")
+    private String editorContent;
     @TableField("week_of_month")
     private int weekOfMonth;
     @TableField("week_of_year")

@@ -33,7 +33,11 @@ public class DailyController {
 
     @PostMapping
     public void addDaily(@RequestBody Daily daily) {
-        dailyService.save(DailyUtil.wrap(daily));
+        if (daily.getId() != null) {
+            dailyService.updateById(daily);
+        } else {
+            dailyService.save(DailyUtil.wrap(daily));
+        }
     }
 
     @DeleteMapping("/{id}")

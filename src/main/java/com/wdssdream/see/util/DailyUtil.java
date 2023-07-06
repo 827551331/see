@@ -1,35 +1,67 @@
 package com.wdssdream.see.util;
 
 import com.wdssdream.see.entity.Daily;
+import org.springframework.util.StringUtils;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
 public class DailyUtil {
 
+    public static LocalDate parseDate(String dateStr, String pattern) {
+        if (!StringUtils.hasLength(pattern)) {
+            pattern = "yyyy-MM-dd";
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            return LocalDate.parse(dateStr, formatter);
+        } catch (DateTimeParseException e) {
+            // 处理日期解析异常
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String formatDate(LocalDate date, String pattern) {
+        if (!StringUtils.hasLength(pattern)) {
+            pattern = "yyyy-MM-dd";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        return date.format(formatter);
+    }
 
     public static int getCurrentWeekOfMonth() {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayOfMonth = currentDate.with(TemporalAdjusters.firstDayOfMonth());
-        if (firstDayOfMonth.getDayOfWeek().getValue() == 6) {
-            firstDayOfMonth = firstDayOfMonth.plusDays(2);
-        }
-        if (firstDayOfMonth.getDayOfWeek().getValue() == 7) {
-            firstDayOfMonth = firstDayOfMonth.plusDays(1);
-        }
-        return (currentDate.getDayOfMonth() - firstDayOfMonth.getDayOfMonth()) / 7 + 1;
+        return getWeekOfMonth(formatDate(LocalDate.now(), null));
+    }
+
+    public static int getWeekOfMonth(String dateString) {
+        LocalDate date = LocalDate.parse(dateString);
+        return getWeekOfMonth(date);
+    }
+
+    public static int getWeekOfMonth(LocalDate date) {
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        return date.get(weekFields.weekOfMonth());
     }
 
     public static int getCurrentWeekOfYear() {
-        LocalDate currentDate = LocalDate.now();
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-        return currentDate.get(weekFields.weekOfYear());
+        return getCurrentWeekOfYear(formatDate(LocalDate.now(), null));
     }
+
+    public static int getCurrentWeekOfYear(String dateString) {
+        LocalDate currentDate = LocalDate.parse(dateString);
+        return getCurrentWeekOfYear(currentDate);
+    }
+
+    public static int getCurrentWeekOfYear(LocalDate date) {
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        return date.get(weekFields.weekOfYear());
+    }
+
 
     public static String getCurrentMonth() {
         LocalDate currentDate = LocalDate.now();
@@ -48,6 +80,7 @@ public class DailyUtil {
         daily.setWeekOfYear(DailyUtil.getCurrentWeekOfYear());
         daily.setDailyMonth(DailyUtil.getCurrentMonth());
         daily.setDailyYear(DailyUtil.getCurrentYear());
+        daily.setCreateTime(LocalDateTime.now());
         daily.setUpdateTime(LocalDateTime.now());
         daily.setCreatePerson("admin");
         daily.setUpdatePerson("admin");
